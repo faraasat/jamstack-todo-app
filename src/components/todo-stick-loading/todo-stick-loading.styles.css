@@ -1,0 +1,45 @@
+.crud-component__stick-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crud-component__stick-loading_box {
+  background: linear-gradient(
+    120deg,
+    rgb(167, 167, 167) 30%,
+    rgb(202, 202, 202) 50%,
+    rgb(209, 209, 209) 70%
+  );
+  width: 59px;
+  height: 59px;
+  margin: 5px 5px;
+  animation: loading 2s ease-in-out infinite alternate;
+  background-size: 400%;
+}
+
+.crud-component__stick-loading_text {
+  background: linear-gradient(
+    120deg,
+    rgb(167, 167, 167) 30%,
+    rgb(202, 202, 202) 50%,
+    rgb(209, 209, 209) 70%
+  );
+  height: 59px;
+  margin: 10px 5px;
+  display: flex;
+  align-items: center;
+  padding: 0px 45px;
+  color: transparent;
+  animation: loading 2s ease-in-out infinite alternate;
+  background-size: 400%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

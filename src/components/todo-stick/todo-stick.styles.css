@@ -1,0 +1,92 @@
+.crud-component__todo-stick {
+  width: 100%;
+  margin: 10px 0px;
+  transition: all 0.5s ease-in-out;
+}
+
+.crud-component__todo-stick:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 0px 14px rgba(1, 1, 1, 0.8);
+  border-radius: 6px;
+}
+
+.crud-component__todo-stick:active {
+  transform: scale(0.97);
+  box-shadow: 0px 0px 11px rgba(1, 1, 1, 0.8);
+  border-radius: 6px;
+}
+
+.crud-component__todo-stick__content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(
+    to bottom,
+    rgb(124, 124, 124),
+    rgb(161, 161, 161),
+    rgb(190, 190, 190)
+  );
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0px 1px 5px rgba(1, 1, 1, 0.7);
+}
+
+.crud-component__todo-stick__content-star svg {
+  font-size: 35px;
+  align-self: center;
+  filter: drop-shadow(0px 0px 1px rgba(1, 1, 1, 1));
+  transition: all 0.5s ease-in-out;
+}
+
+.crud-component__todo-stick__content-star:hover svg {
+  filter: brightness(90%);
+  transform: scale(1.1);
+  filter: drop-shadow(0px 0px 2px rgba(1, 1, 1, 1));
+}
+
+.crud-component__todo-stick__content-task {
+  font-family: "Pacifico", cursive;
+  font-size: 23px;
+  font-weight: bold;
+  color: wheat;
+  text-shadow: 0px 0px 2px rgba(1, 1, 1, 1);
+  margin-left: 20px;
+}
+
+.crud-component__todo-stick__content-task:hover {
+  text-shadow: 0px 0px 5px rgba(1, 1, 1, 1);
+}
+
+.crud-component__todo-stick__content-icons {
+  margin-left: auto;
+}
+
+.crud-component__todo-stick__content-delete svg {
+  color: rgb(231, 104, 104);
+  font-size: 35px;
+  align-self: center;
+  transition: all 0.5s ease-in-out;
+  filter: drop-shadow(0px 0px 1px rgba(1, 1, 1, 1));
+}
+
+.crud-component__todo-stick__content-delete:hover svg {
+  color: rgb(252, 96, 96);
+  transform: scale(1.1);
+  filter: drop-shadow(0px 0px 2px rgba(1, 1, 1, 1));
+}
+
+.crud-component__todo-stick__content-update svg {
+  color: rgb(125, 231, 104);
+  font-size: 35px;
+  align-self: center;
+  transition: all 0.5s ease-in-out;
+  filter: drop-shadow(0px 0px 1px rgba(1, 1, 1, 1));
+}
+
+.crud-component__todo-stick__content-update:hover svg {
+  color: rgb(117, 253, 90);
+  transform: scale(1.1);
+  filter: drop-shadow(0px 0px 2px rgba(1, 1, 1, 1));
+}
