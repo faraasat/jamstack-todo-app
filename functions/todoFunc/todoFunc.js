@@ -45,11 +45,11 @@ const resolvers = {
           todoArr = [
             ...todoArr,
             {
-              refId: element?.ref["@ref"].id,
-              collectionName: element?.ref["@ref"].collection["@ref"].id,
-              id: element?.data?.id,
-              task: element?.data?.task,
-              starred: element?.data?.starred,
+              refId: element.ref["@ref"].id,
+              collectionName: element.ref["@ref"].collection["@ref"].id,
+              id: element.data.id,
+              task: element.data.task,
+              starred: element.data.starred,
             },
           ]
         })
@@ -81,11 +81,11 @@ const resolvers = {
         const parsedRes = JSON.parse(result)
 
         return {
-          refId: parsedRes?.ref["@ref"].id,
-          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
-          id: parsedRes?.data?.id,
-          task: parsedRes?.data?.task,
-          starred: parsedRes?.data?.starred,
+          refId: parsedRes.ref["@ref"].id,
+          collectionName: parsedRes.ref["@ref"].collection["@ref"].id,
+          id: parsedRes.data.id,
+          task: parsedRes.data.task,
+          starred: parsedRes.data.starred,
         }
       } catch (error) {
         console.log(error)
@@ -104,11 +104,11 @@ const resolvers = {
         const parsedRes = JSON.parse(result)
 
         return {
-          refId: parsedRes?.ref["@ref"].id,
-          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
-          id: parsedRes?.data?.id,
-          task: parsedRes?.data?.task,
-          starred: parsedRes?.data?.starred,
+          refId: parsedRes.ref["@ref"].id,
+          collectionName: parsedRes.ref["@ref"].collection["@ref"].id,
+          id: parsedRes.data.id,
+          task: parsedRes.data.task,
+          starred: parsedRes.data.starred,
         }
       } catch (error) {
         console.log(error)
@@ -129,11 +129,11 @@ const resolvers = {
         const parsedRes = JSON.parse(result)
 
         return {
-          refId: parsedRes?.ref["@ref"].id,
-          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
-          id: parsedRes?.data?.id,
-          task: parsedRes?.data?.task,
-          starred: parsedRes?.data?.starred,
+          refId: parsedRes.ref["@ref"].id,
+          collectionName: parsedRes.ref["@ref"].collection["@ref"].id,
+          id: parsedRes.data.id,
+          task: parsedRes.data.task,
+          starred: parsedRes.data.starred,
         }
       } catch (error) {
         console.log(error)
@@ -154,11 +154,11 @@ const resolvers = {
         const parsedRes = JSON.parse(result)
 
         return {
-          refId: parsedRes?.ref["@ref"].id,
-          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
-          id: parsedRes?.data?.id,
-          task: parsedRes?.data?.task,
-          starred: parsedRes?.data?.starred,
+          refId: parsedRes.ref["@ref"].id,
+          collectionName: parsedRes.ref["@ref"].collection["@ref"].id,
+          id: parsedRes.data.id,
+          task: parsedRes.data.task,
+          starred: parsedRes.data.starred,
         }
       } catch (error) {
         console.log(error)
