@@ -19,7 +19,10 @@ export const TodoSlice = createSlice({
   reducers: {
     getTodos: (state, action) => {
       state.allTodos = action.payload
-      if (state.todos.getTodos.length === 0) {
+      if (
+        state.todos.getTodos.length === 0 ||
+        state.allTodos.getTodos !== state.todos.getTodos
+      ) {
         state.todos = action.payload
       }
     },
@@ -27,9 +30,7 @@ export const TodoSlice = createSlice({
       const abc = state.allTodos.getTodos.filter(da => {
         return da.task.toLowerCase().includes(action.payload.toLowerCase())
       })
-      console.log(abc)
       state.todos = { getTodos: [...abc] }
-      console.log(state.todos)
     },
     refreshComponent: (state, action) => {
       state.updateId = action.payload
