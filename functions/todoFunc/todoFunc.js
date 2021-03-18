@@ -13,6 +13,7 @@ const typeDefs = gql`
     addTodo(task: String!): Todos
     deleteTodo(refId: String!): Todos
     updateTodo(refId: String!, task: String!): Todos
+    updateStarred(refId: String!, starred: Boolean!): Todos
   }
   type Todos {
     refId: String!
@@ -122,6 +123,31 @@ const resolvers = {
           await adminClient.query(
             q.Update(q.Ref(q.Collection("todoApp"), refId), {
               data: { task: task },
+            })
+          )
+        )
+        const parsedRes = JSON.parse(result)
+
+        return {
+          refId: parsedRes?.ref["@ref"].id,
+          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
+          id: parsedRes?.data?.id,
+          task: parsedRes?.data?.task,
+          starred: parsedRes?.data?.starred,
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    updateStarred: async (_, { refId, starred }) => {
+      try {
+        var adminClient = new faunadb.Client({
+          secret: process.env.FAUNADB_SECRET_KEY,
+        })
+        const result = JSON.stringify(
+          await adminClient.query(
+            q.Update(q.Ref(q.Collection("todoApp"), refId), {
+              data: { starred: starred },
             })
           )
         )

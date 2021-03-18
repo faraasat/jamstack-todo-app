@@ -35,9 +35,9 @@ export const TodoSlice = createSlice({
     pinTodo: (state, action) => {
       state.todos = {
         getTodos: state.allTodos.getTodos.map(datum => {
-          if (datum.getTodos.id === action.payload) {
+          if (datum.id === action.payload) {
             var temp = Object.assign({}, datum)
-            temp.getTodos.starred = !temp.getTodos.starred
+            temp.starred = !temp.starred
             return temp
           }
           return datum

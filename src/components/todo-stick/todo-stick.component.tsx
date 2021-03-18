@@ -26,6 +26,18 @@ const DELETE_TODO = gql`
   }
 `
 
+const STARRED_TODO = gql`
+  mutation updateStarred($refId: String!, $starred: Boolean!) {
+    updateStarred(refId: $refId, starred: $starred) {
+      id
+      refId
+      collectionName
+      task
+      task
+    }
+  }
+`
+
 const GET_DATA = gql`
   query {
     getTodos {
@@ -43,6 +55,7 @@ const TodoStickComponent = ({ refObj }) => {
   const [changeStarredData, setChangeStarredData] = useState<any>()
   const [openDetail, setOpenDetail] = useState<boolean>(false)
   const [deleteTodo] = useMutation(DELETE_TODO)
+  const [updateStarred] = useMutation(STARRED_TODO)
   const { refetch } = useQuery(GET_DATA)
   const dispatch = useDispatch()
 
@@ -70,18 +83,19 @@ const TodoStickComponent = ({ refObj }) => {
   }
 
   const handleStarredUpdate = async value => {
-    const values = {
-      refId: refObj.refId,
-      collection: refObj.collectionName,
-      starred: value,
-    }
     try {
       dispatch(pinTodo(refObj.id))
-      const res = await fetch("/.netlify/functions/pin_unpin", {
-        method: "POST",
-        body: JSON.stringify(values),
+      const res = updateStarred({
+        variables: {
+          refId: refObj.refId,
+          starred: value,
+          refetchQueries: [{ query: GET_DATA }],
+        },
       })
-      setChangeStarredData(await res.json())
+      res.then(data => {
+        setChangeStarredData(data.data)
+        refetch()
+      })
     } catch (error) {
       console.log(error)
     }
