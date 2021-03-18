@@ -9,6 +9,9 @@ const typeDefs = gql`
   type Query {
     getTodos: [Todos!]
   }
+  type Mutation {
+    addTodo(task: String!): Todos
+  }
   type Todos {
     refId: String!
     collectionName: String!
@@ -50,7 +53,39 @@ const resolvers = {
 
         return todoArr
       } catch (error) {
-        console.log(error instanceof Error)
+        console.log(error)
+      }
+    },
+  },
+  Mutation: {
+    addTodo: async (_, { task }) => {
+      try {
+        var adminClient = new faunadb.Client({
+          secret: process.env.FAUNADB_SECRET_KEY,
+        })
+        const result = JSON.stringify(
+          await adminClient.query(
+            q.Create(q.Collection("todoApp"), {
+              data: {
+                id: cuid(),
+                task: task,
+                starred: false,
+              },
+            })
+          )
+        )
+
+        const parsedRes = JSON.parse(result)
+
+        return {
+          refId: parsedRes?.ref["@ref"].id,
+          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
+          id: parsedRes?.data?.id,
+          task: parsedRes?.data?.task,
+          starred: parsedRes?.data?.starred,
+        }
+      } catch (error) {
+        console.log(error)
       }
     },
   },
