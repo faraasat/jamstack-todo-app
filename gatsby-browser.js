@@ -1,2 +1,2 @@
 import "./src/global.css"
-export { wrapRootElement } from "./src/store/store"
+export { wrapRootElement } from "./src/wrap-root-element"
