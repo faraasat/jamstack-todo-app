@@ -69,7 +69,6 @@ const AddTodoComponent = () => {
       res.then(data => {
         setAddTodoData(data.data)
         refetch()
-        console.log(data)
       })
     } catch (error) {
       console.log(error)

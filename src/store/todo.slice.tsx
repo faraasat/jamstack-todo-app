@@ -1,19 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
-export const fetchTodos: any = createAsyncThunk(
-  "data/fetchTodos",
-  async (data, thunkAPI) => {
-    const response = await fetch("/.netlify/functions/get_todos")
-    return await response.json()
-  }
-)
-
 export const TodoSlice = createSlice({
   name: "todoSlice",
   initialState: {
     todos: { getTodos: [] },
     updateId: {},
-    todoLoading: false,
     allTodos: { getTodos: [] },
   },
   reducers: {
@@ -37,9 +28,8 @@ export const TodoSlice = createSlice({
     },
     deleteTodo: (state, action) => {
       const abc = state.allTodos.getTodos.filter(da => {
-        return da.ref["@ref"].id !== action.payload
+        return String(da.refId) !== String(action.payload)
       })
-      state.allTodos = { getTodos: [...abc] }
       state.todos = { getTodos: [...abc] }
     },
     pinTodo: (state, action) => {
@@ -55,20 +45,6 @@ export const TodoSlice = createSlice({
       }
     },
   },
-  extraReducers: {
-    [fetchTodos.fulfilled]: (state, action) => {
-      state.todos = action.payload
-      state.allTodos = action.payload
-      state.todoLoading = false
-    },
-    [fetchTodos.reject]: (state, action) => {
-      console.log("fetchTodos Rejected")
-      state.todoLoading = false
-    },
-    [fetchTodos.pending]: (state, action) => {
-      state.todoLoading = true
-    },
-  },
 })
 
 export const {
@@ -82,6 +58,5 @@ export const selectTodoData = (state: any) => ({
   todoData: state.todoReducer.todos,
   allTodos: state.todoReducer.allTodos,
   updateId: state.todoReducer.updateId,
-  todoLoading: state.todoReducer.todoLoading,
 })
 export const TodoSliceReducer = TodoSlice.reducer

@@ -12,9 +12,37 @@ import "./update-todo.styles.css"
 import { useFormik } from "formik"
 import { useDispatch } from "react-redux"
 import { refreshComponent } from "../../store/todo.slice"
+import { gql } from "graphql-tag"
+import { useMutation, useQuery } from "@apollo/client"
+
+const UPDATE_TODO = gql`
+  mutation updateTodo($refId: String!, $task: String!) {
+    updateTodo(refId: $refId, task: $task) {
+      id
+      refId
+      collectionName
+      task
+      task
+    }
+  }
+`
+
+const GET_DATA = gql`
+  query {
+    getTodos {
+      refId
+      collectionName
+      id
+      task
+      starred
+    }
+  }
+`
 
 const UpdateTodoComponent = ({ prev, openDetail, setOpenDetail, refObj }) => {
   const [addTodoData, setAddTodoData] = useState<any>()
+  const [updateTodo] = useMutation(UPDATE_TODO)
+  const { refetch } = useQuery(GET_DATA)
   const dispatch = useDispatch()
 
   const handleClose = () => {
@@ -28,15 +56,17 @@ const UpdateTodoComponent = ({ prev, openDetail, setOpenDetail, refObj }) => {
   const addTodo = async (values: any) => {
     if (prev === values.todo || prev === "" || prev.length <= 3) return
     try {
-      const res = await fetch("/.netlify/functions/update_todo", {
-        method: "POST",
-        body: JSON.stringify({
-          task: values.todo,
+      const res = updateTodo({
+        variables: {
           refId: refObj.refId,
-          collection: refObj.collection,
-        }),
+          task: values.todo,
+          refetchQueries: [{ query: GET_DATA }],
+        },
       })
-      setAddTodoData(await res.json())
+      res.then(data => {
+        setAddTodoData(data.data)
+        refetch()
+      })
     } catch (error) {
       console.log(error)
     }

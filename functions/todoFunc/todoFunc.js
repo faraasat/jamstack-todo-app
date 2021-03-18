@@ -11,6 +11,8 @@ const typeDefs = gql`
   }
   type Mutation {
     addTodo(task: String!): Todos
+    deleteTodo(refId: String!): Todos
+    updateTodo(refId: String!, task: String!): Todos
   }
   type Todos {
     refId: String!
@@ -75,6 +77,54 @@ const resolvers = {
           )
         )
 
+        const parsedRes = JSON.parse(result)
+
+        return {
+          refId: parsedRes?.ref["@ref"].id,
+          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
+          id: parsedRes?.data?.id,
+          task: parsedRes?.data?.task,
+          starred: parsedRes?.data?.starred,
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    deleteTodo: async (_, { refId }) => {
+      try {
+        var adminClient = new faunadb.Client({
+          secret: process.env.FAUNADB_SECRET_KEY,
+        })
+        const result = JSON.stringify(
+          await adminClient.query(
+            q.Delete(q.Ref(q.Collection("todoApp"), refId))
+          )
+        )
+        const parsedRes = JSON.parse(result)
+
+        return {
+          refId: parsedRes?.ref["@ref"].id,
+          collectionName: parsedRes?.ref["@ref"].collection["@ref"].id,
+          id: parsedRes?.data?.id,
+          task: parsedRes?.data?.task,
+          starred: parsedRes?.data?.starred,
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    updateTodo: async (_, { refId, task }) => {
+      try {
+        var adminClient = new faunadb.Client({
+          secret: process.env.FAUNADB_SECRET_KEY,
+        })
+        const result = JSON.stringify(
+          await adminClient.query(
+            q.Update(q.Ref(q.Collection("todoApp"), refId), {
+              data: { task: task },
+            })
+          )
+        )
         const parsedRes = JSON.parse(result)
 
         return {

@@ -5,13 +5,45 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import UpdateIcon from "@material-ui/icons/Update"
 import { useDispatch } from "react-redux"
 import UpdateTodoComponent from "../update-todo/update-todo.component"
-import { deleteTodo, refreshComponent, pinTodo } from "../../store/todo.slice"
+import {
+  deleteTodo as deleteMyTodo,
+  refreshComponent,
+  pinTodo,
+} from "../../store/todo.slice"
 import "./todo-stick.styles.css"
+import { gql } from "graphql-tag"
+import { useMutation, useQuery } from "@apollo/client"
+
+const DELETE_TODO = gql`
+  mutation deleteTodo($refId: String!) {
+    deleteTodo(refId: $refId) {
+      id
+      refId
+      collectionName
+      task
+      task
+    }
+  }
+`
+
+const GET_DATA = gql`
+  query {
+    getTodos {
+      refId
+      collectionName
+      id
+      task
+      starred
+    }
+  }
+`
 
 const TodoStickComponent = ({ refObj }) => {
   const [changeTodoData, setChangeTodoData] = useState<any>()
   const [changeStarredData, setChangeStarredData] = useState<any>()
   const [openDetail, setOpenDetail] = useState<boolean>(false)
+  const [deleteTodo] = useMutation(DELETE_TODO)
+  const { refetch } = useQuery(GET_DATA)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -20,17 +52,18 @@ const TodoStickComponent = ({ refObj }) => {
   }, [changeTodoData, changeStarredData])
 
   const handleTodoDelete = async () => {
-    const values = {
-      refId: refObj.refId,
-      collection: refObj.collectionName,
-    }
+    dispatch(deleteMyTodo(refObj.refId))
     try {
-      dispatch(deleteTodo(values.refId))
-      const res = await fetch("/.netlify/functions/delete_todos", {
-        method: "POST",
-        body: JSON.stringify(values),
+      const res = deleteTodo({
+        variables: {
+          refId: refObj.refId,
+          refetchQueries: [{ query: GET_DATA }],
+        },
       })
-      setChangeTodoData(await res.json())
+      res.then(data => {
+        setChangeTodoData(data.data)
+        refetch()
+      })
     } catch (error) {
       console.log(error)
     }
@@ -104,10 +137,7 @@ const TodoStickComponent = ({ refObj }) => {
         prev={refObj.task}
         openDetail={openDetail}
         setOpenDetail={setOpenDetail}
-        refObj={{
-          refId: refObj.refId,
-          collection: refObj.collectionName,
-        }}
+        refObj={refObj}
       />
     </>
   )
