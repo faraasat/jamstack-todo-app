@@ -1,0 +1,14 @@
+.crud-page__index {
+  padding: 20px 10vw;
+  min-height: calc(100vh - 65px - 40px - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.crud-page__index__todos-list {
+  margin-top: 55px;
+  width: 50%;
+  min-width: 400px;
+}

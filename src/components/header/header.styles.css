@@ -1,0 +1,43 @@
+* {
+  font-family: "Rancher", cursive;
+}
+
+.crud-component__header {
+  max-height: 60px;
+  height: 60px;
+  box-sizing: border-box;
+  background-color: rgb(98, 182, 255);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom: 1.5px solid rgba(1, 1, 1, 0.2);
+}
+
+.crud-component__header .crud-component__header-brand {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 30px;
+  font-family: "Potta One", cursive;
+  color: wheat;
+  text-shadow: 0.2px 0.2px 2.5px rgba(1, 1, 1, 1);
+}
+
+.crud-component__container {
+  padding: 0px 3vw;
+  width: calc(100%);
+  display: flex;
+  align-items: center;
+}
+
+.crud-component__container .crud-component__header-links {
+  margin-left: 30px;
+}
+
+.crud-component__header-links a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 25px;
+  color: white;
+  text-shadow: 0px 0px 2.5px rgba(1, 1, 1, 1);
+  margin: 0px 10px;
+}
