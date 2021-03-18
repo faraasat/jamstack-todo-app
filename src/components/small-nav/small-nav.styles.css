@@ -1,0 +1,10 @@
+.crud-component__small-nav {
+  width: 100%;
+}
+
+.crud-component__alignment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0px 8vw;
+}
