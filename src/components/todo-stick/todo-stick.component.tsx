@@ -9,7 +9,6 @@ import { deleteTodo, refreshComponent, pinTodo } from "../../store/todo.slice"
 import "./todo-stick.styles.css"
 
 const TodoStickComponent = ({ refObj }) => {
-  const { ref, data } = refObj
   const [changeTodoData, setChangeTodoData] = useState<any>()
   const [changeStarredData, setChangeStarredData] = useState<any>()
   const [openDetail, setOpenDetail] = useState<boolean>(false)
@@ -22,8 +21,8 @@ const TodoStickComponent = ({ refObj }) => {
 
   const handleTodoDelete = async () => {
     const values = {
-      refId: ref["@ref"].id,
-      collection: ref["@ref"].collection["@ref"].id,
+      refId: refObj.refId,
+      collection: refObj.collectionName,
     }
     try {
       dispatch(deleteTodo(values.refId))
@@ -39,12 +38,12 @@ const TodoStickComponent = ({ refObj }) => {
 
   const handleStarredUpdate = async value => {
     const values = {
-      refId: ref["@ref"].id,
-      collection: ref["@ref"].collection["@ref"].id,
+      refId: refObj.refId,
+      collection: refObj.collectionName,
       starred: value,
     }
     try {
-      dispatch(pinTodo(data.id))
+      dispatch(pinTodo(refObj.id))
       const res = await fetch("/.netlify/functions/pin_unpin", {
         method: "POST",
         body: JSON.stringify(values),
@@ -64,7 +63,7 @@ const TodoStickComponent = ({ refObj }) => {
       <div className="crud-component__todo-stick">
         <div className="crud-component__todo-stick__content">
           <span className="crud-component__todo-stick__content-star">
-            {data.starred ? (
+            {refObj.starred ? (
               <StarIcon
                 onClick={() => handleStarredUpdate(false)}
                 style={{ color: "#7a9dff" }}
@@ -77,7 +76,7 @@ const TodoStickComponent = ({ refObj }) => {
             )}
           </span>
           <span className="crud-component__todo-stick__content-task">
-            {data.task}
+            {refObj.task}
           </span>
           <div className="crud-component__todo-stick__content-icons">
             <span
@@ -102,12 +101,12 @@ const TodoStickComponent = ({ refObj }) => {
         </div>
       </div>
       <UpdateTodoComponent
-        prev={data.task}
+        prev={refObj.task}
         openDetail={openDetail}
         setOpenDetail={setOpenDetail}
         refObj={{
-          refId: ref["@ref"].id,
-          collection: ref["@ref"].collection["@ref"].id,
+          refId: refObj.refId,
+          collection: refObj.collectionName,
         }}
       />
     </>

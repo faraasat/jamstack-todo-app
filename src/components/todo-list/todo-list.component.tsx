@@ -6,45 +6,64 @@ import { fetchTodos, selectTodoData } from "../../store/todo.slice"
 import MoodBadIcon from "@material-ui/icons/MoodBad"
 import cuid from "cuid"
 import "./todo-list.styles.css"
+import { gql } from "graphql-tag"
+import { useQuery } from "@apollo/client"
+
+const GET_DATA = gql`
+  query {
+    getTodos {
+      refId
+      collectionName
+      id
+      task
+      starred
+    }
+  }
+`
 
 const TodoListComponent = () => {
   const dispatch = useDispatch()
-  const { todoData, updateId, todoLoading } = useSelector(selectTodoData)
+  const { data, loading, error } = useQuery(GET_DATA)
   let sortedTodos = { data: [] }
 
-  React.useEffect(() => {
-    dispatch(fetchTodos())
-  }, [updateId])
+  // React.useEffect(() => {
+  //   dispatch(fetchTodos())
+  // }, [updateId])
 
-  if (todoData.data.length !== 0) {
+  if (typeof data != "undefined" && !loading) {
     sortedTodos = {
       data: [
-        ...todoData.data.filter(todoData => {
-          return todoData.data.starred === true
+        ...data.getTodos.filter(todoData => {
+          return todoData.starred === true
         }),
-        ...todoData.data.filter(todoData => {
-          return todoData.data.starred === false
+        ...data.getTodos.filter(todoData => {
+          return todoData.starred === false
         }),
       ],
     }
   }
 
+  if (error) {
+    console.log(error)
+    return <div>Error</div>
+  }
+
   return (
     <>
-      {todoLoading && todoData.data.length === 0 ? (
+      {loading && typeof data == "undefined" ? (
         <>
           <TodoStickLoadingComponent key={cuid()} />
           <TodoStickLoadingComponent key={cuid()} />
           <TodoStickLoadingComponent key={cuid()} />
           <TodoStickLoadingComponent key={cuid()} />
         </>
-      ) : todoData.data.length !== 0 && sortedTodos.data.length !== 0 ? (
+      ) : typeof data != "undefined" && sortedTodos.data.length !== 0 ? (
         sortedTodos.data.map((todoData: any) => {
           return <TodoStickComponent key={todoData.id} refObj={todoData} />
         })
       ) : (
-        !todoLoading &&
-        todoData.data.length === 0 && (
+        !loading &&
+        typeof data != "undefined" && (
           <div className="crud-component__todo-list__nothing">
             <MoodBadIcon />
             Ooops! Nothing To show...
