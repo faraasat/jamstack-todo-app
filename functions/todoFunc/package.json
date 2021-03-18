@@ -1,0 +1,14 @@
+{
+  "name": "todofunc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "todoFunc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-lambda": "^2.21.1"
+  }
+}
