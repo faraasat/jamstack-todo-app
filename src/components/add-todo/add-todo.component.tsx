@@ -12,11 +12,39 @@ import "./add-todo.styles.css"
 import { useFormik } from "formik"
 import { useDispatch } from "react-redux"
 import { refreshComponent } from "../../store/todo.slice"
+import { gql } from "graphql-tag"
+import { useMutation, useQuery } from "@apollo/client"
+
+const ADD_TODO = gql`
+  mutation addTodo($task: String!) {
+    addTodo(task: $task) {
+      refId
+      collectionName
+      id
+      task
+      starred
+    }
+  }
+`
+
+const GET_DATA = gql`
+  query {
+    getTodos {
+      refId
+      collectionName
+      id
+      task
+      starred
+    }
+  }
+`
 
 const AddTodoComponent = () => {
   const [open, setOpen] = React.useState(false)
   const [addTodoData, setAddTodoData] = useState<any>()
   const dispatch = useDispatch()
+  const [addTodo] = useMutation(ADD_TODO)
+  const { refetch } = useQuery(GET_DATA)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -30,13 +58,19 @@ const AddTodoComponent = () => {
     dispatch(refreshComponent(addTodoData))
   }, [addTodoData])
 
-  const addTodo = async (values: any) => {
+  const addMyTodo = async (values: any) => {
     try {
-      const res = await fetch("/.netlify/functions/create_todo", {
-        method: "POST",
-        body: JSON.stringify(values),
+      const res = addTodo({
+        variables: {
+          task: values,
+          refetchQueries: [{ query: GET_DATA }],
+        },
       })
-      setAddTodoData(await res.json())
+      res.then(data => {
+        setAddTodoData(data.data)
+        refetch()
+        console.log(data)
+      })
     } catch (error) {
       console.log(error)
     }
@@ -56,7 +90,7 @@ const AddTodoComponent = () => {
     },
     onSubmit: (values, { setSubmitting, resetForm }) => {
       setSubmitting(true)
-      addTodo(values)
+      addMyTodo(values.todo)
       setSubmitting(false)
       resetForm()
       setOpen(false)

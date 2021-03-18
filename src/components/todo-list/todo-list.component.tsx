@@ -1,13 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import TodoStickLoadingComponent from "../todo-stick-loading/todo-stick-loading.component"
 import TodoStickComponent from "../todo-stick/todo-stick.component"
-import { useDispatch, useSelector } from "react-redux"
-import { fetchTodos, selectTodoData } from "../../store/todo.slice"
 import MoodBadIcon from "@material-ui/icons/MoodBad"
 import cuid from "cuid"
 import "./todo-list.styles.css"
 import { gql } from "graphql-tag"
 import { useQuery } from "@apollo/client"
+import { useDispatch, useSelector } from "react-redux"
+import { getTodos, selectTodoData } from "../../store/todo.slice"
 
 const GET_DATA = gql`
   query {
@@ -22,21 +22,26 @@ const GET_DATA = gql`
 `
 
 const TodoListComponent = () => {
-  const dispatch = useDispatch()
   const { data, loading, error } = useQuery(GET_DATA)
   let sortedTodos = { data: [] }
+  const dispatch = useDispatch()
+  const { todoData, allTodos } = useSelector(selectTodoData)
 
-  // React.useEffect(() => {
-  //   dispatch(fetchTodos())
-  // }, [updateId])
+  if (data && data !== allTodos) {
+    dispatch(getTodos(data))
+  }
 
-  if (typeof data != "undefined" && !loading) {
+  if (
+    typeof data != "undefined" &&
+    !loading &&
+    todoData.getTodos.length !== 0
+  ) {
     sortedTodos = {
       data: [
-        ...data.getTodos.filter(todoData => {
+        ...todoData.getTodos.filter(todoData => {
           return todoData.starred === true
         }),
-        ...data.getTodos.filter(todoData => {
+        ...todoData.getTodos.filter(todoData => {
           return todoData.starred === false
         }),
       ],

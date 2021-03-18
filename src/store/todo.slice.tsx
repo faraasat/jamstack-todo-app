@@ -11,34 +11,42 @@ export const fetchTodos: any = createAsyncThunk(
 export const TodoSlice = createSlice({
   name: "todoSlice",
   initialState: {
-    todos: { data: [] },
-    updateId: "",
+    todos: { getTodos: [] },
+    updateId: {},
     todoLoading: false,
-    allTodos: { data: [] },
+    allTodos: { getTodos: [] },
   },
   reducers: {
+    getTodos: (state, action) => {
+      state.allTodos = action.payload
+      if (state.todos.getTodos.length === 0) {
+        state.todos = action.payload
+      }
+    },
     searchTodos: (state, action) => {
-      const abc = state.allTodos.data.filter(da => {
-        return da.data.task.toLowerCase().includes(action.payload.toLowerCase())
+      const abc = state.allTodos.getTodos.filter(da => {
+        return da.task.toLowerCase().includes(action.payload.toLowerCase())
       })
-      state.todos = { data: [...abc] }
+      console.log(abc)
+      state.todos = { getTodos: [...abc] }
+      console.log(state.todos)
     },
     refreshComponent: (state, action) => {
       state.updateId = action.payload
     },
     deleteTodo: (state, action) => {
-      const abc = state.allTodos.data.filter(da => {
+      const abc = state.allTodos.getTodos.filter(da => {
         return da.ref["@ref"].id !== action.payload
       })
-      state.allTodos = { data: [...abc] }
-      state.todos = { data: [...abc] }
+      state.allTodos = { getTodos: [...abc] }
+      state.todos = { getTodos: [...abc] }
     },
     pinTodo: (state, action) => {
       state.todos = {
-        data: state.allTodos.data.map(datum => {
-          if (datum.data.id === action.payload) {
+        getTodos: state.allTodos.getTodos.map(datum => {
+          if (datum.getTodos.id === action.payload) {
             var temp = Object.assign({}, datum)
-            temp.data.starred = !temp.data.starred
+            temp.getTodos.starred = !temp.getTodos.starred
             return temp
           }
           return datum
@@ -67,6 +75,7 @@ export const {
   refreshComponent,
   deleteTodo,
   pinTodo,
+  getTodos,
 } = TodoSlice.actions
 export const selectTodoData = (state: any) => ({
   todoData: state.todoReducer.todos,
